@@ -1,0 +1,9 @@
+apply plugin: 'com.android.library'
+android {
+    compileSdkVersion 27
+}
+dependencies {
+    implementation project(':LIB_NFC')
+    //implementation project(':usbserial-old')
+    implementation 'com.github.felHR85:UsbSerial:5.0.1'
+}

@@ -1,0 +1,7 @@
+include ':NfcService', ':LIB_ACS', ':LIB_AudioUART'
+//include ':usbserial-old'
+include ':LIB_MFRC522'
+include ':LIB_PN532'
+include ':LIB_NFC'
+include ':LIB_ACS'
+include ':LIB_ACS'

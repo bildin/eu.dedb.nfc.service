@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Settings" >
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="476dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/settings_title_service"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <CheckBox
+            android:id="@+id/settings_service_state"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_service_state" />
+
+        <CheckBox
+            android:id="@+id/settings_start_at_boot"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_start_at_boot" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/settings_device"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
+
+        <CheckBox
+            android:id="@+id/settings_pcsc_mode"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_pcsc_mode" />
+
+        <LinearLayout
+            style="@style/NfcSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/settings_baudrate"
+                android:textAppearance="?android:attr/textAppearance" />
+
+            <Spinner
+                android:id="@+id/settings_baudrate"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:entries="@array/baudrates"
+                android:gravity="end|center_vertical"
+                android:popupBackground="@color/black"
+                android:spinnerMode="dropdown"
+                android:dropDownSelector="@color/black"
+                android:background="@drawable/btn_border"
+                android:text="@string/settings_baudrate" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/settings_discovering"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
+
+        <CheckBox
+            android:id="@+id/settings_vibrate"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_vibrate" />
+
+        <CheckBox
+            android:id="@+id/settings_ignore_screen_lock"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_ignore_screen_lock" />
+
+        <CheckBox
+            android:id="@+id/settings_system_dispatch"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_system_dispatch" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/settings_clone"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
+
+        <CheckBox
+            android:id="@+id/settings_chinese_activation"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_chinese_activation" />
+
+        <CheckBox
+            android:id="@+id/settings_chinese_any_key"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_chinese_any_key" />
+
+        <CheckBox
+            android:id="@+id/settings_ignore_BCC_error"
+            style="@style/NfcCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_ignore_BCC_error" />
+    </LinearLayout>
+
+</ScrollView>

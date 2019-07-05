@@ -1,0 +1,36 @@
+<resources>
+
+    <string name="app_name">External NFC</string>
+    <string name="app_chooser_name">NFC Activity</string>
+    <string name="app_chooser_title">Choose Activity</string>
+    <string name="app_settings_name">NFC Settings</string>
+    <string name="srv_starter_name">External NFC service</string>
+    <string name="state_card_active">Card is active</string>
+    <string name="state_card_polling">No card</string>
+    <string name="state_card_present">Card is present</string>
+    <string name="state_error">Device error</string>
+    <string name="state_no_device">No device</string>
+    <string name="settings_title_service">NFC Service settings</string>
+    <string name="settings_clone">Clone cards</string>
+    <string name="settings_service_state"><big>Service state</big>\n<small>Shows current state of service.\nClick to update state. Long press to toggle state.</small></string>
+    <string name="settings_start_at_boot"><big>Autostart</big>\n<small>Enables or disables service start on boot.</small></string>
+    <string name="settings_discovering">Discovery options</string>
+    <string name="settings_vibrate"><big>Vibrate</big>\n<small>Adds vibration when new tag detected.</small></string>
+    <string name="settings_ignore_screen_lock"><big>Ignore screen lock</big>\n<small>Preserve service work when screen is off.</small></string>
+    <string name="settings_system_dispatch"><big>System app chooser</big>\n<small>Allows system dispatch.\nWRITE_SECURE_SETTINGS permission is required (root access)</small></string>
+    <string name="settings_chinese_activation"><big>Chinese activation</big>\n<small>Activate chinese clone cards for full memory access.</small></string>
+    <string name="settings_chinese_any_key"><big>Any key authorization</big>\n<small>Accept any key from applications for pseudo-authentication on activated chinese clone cards.</small></string>
+    <string name="settings_ignore_BCC_error"><big>Ignore BCC error</big>\n<small>Tags with wrong BCC are polled. This may help to repair broken clone cards.</small></string>
+    <string name="root_request">Waiting for root permission…</string>
+    <string name="root_request_granted">Root permission granted</string>
+    <string name="root_request_declined">Root permission declined</string>
+    <string name="root_request_unavailable">Root permission is unavailable</string>
+    <string name="service_starting">Service is starting…</string>
+    <string name="service_stopping">Service is stopping…</string>
+    <string name="settings_device">Device settings</string>
+    <string name="settings_pcsc_mode"><big>PC/SC Mode</big>\n<small>PC/SC reader support (ACS readers)</small></string>
+    <string name="settings_baudrate"><big>Baudrate</big>\n<small>Adjust serial baudrate (UART connection)\nReconnect device to apply.</small></string>
+    <string name="default_baudrate">default</string>
+    <string name="connection_error">Device connection error</string>
+
+</resources>

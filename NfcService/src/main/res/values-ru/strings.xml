@@ -1,0 +1,36 @@
+<resources>
+
+    <string name="app_name">Внешний NFC</string>
+    <string name="app_chooser_name">Приложение NFC</string>
+    <string name="app_chooser_title">Выберите действие</string>
+    <string name="app_settings_name">Настройки NFC</string>
+    <string name="srv_starter_name">Служба внешнего NFC</string>
+    <string name="state_card_active">Карта активна</string>
+    <string name="state_card_polling">Нет карты</string>
+    <string name="state_card_present">Карта обнаружена</string>
+    <string name="state_error">Ошибка устройства</string>
+    <string name="state_no_device">Нет устройства</string>
+    <string name="settings_title_service">Настройки NFC службы</string>
+    <string name="settings_clone">Клон-карты</string>
+    <string name="settings_service_state"><big>Состояние службы</big>\n<small>Отображает текущее состояние службы.\nЩелкните, чтобы обновить. Удерживайте, чтобы переключить.</small></string>
+    <string name="settings_start_at_boot"><big>Автозапуск</big>\n<small>Разрешает или запрещает запуск при загрузке.</small></string>
+    <string name="settings_discovering">Настройки обнаружения</string>
+    <string name="settings_vibrate"><big>Вибрировать</big>\n<small>Добавляет вибрацию при обнаружении карты.</small></string>
+    <string name="settings_ignore_screen_lock"><big>Игнорировать блокировку экрана</big>\n<small>Продолжает работу службы при выключенном экране.</small></string>
+    <string name="settings_system_dispatch"><big>Системный выбор приложения</big>\n<small>Разрешает системную обработку обнаружения.\nНеобходимо разрешение WRITE_SECURE_SETTINGS (права супер-пользователя)</small></string>
+    <string name="settings_chinese_activation"><big>Активация клон-карт</big>\n<small>Использовать специальную активацию для полного доступа к памяти на китайских клон-картах.</small></string>
+    <string name="settings_chinese_any_key"><big>Авторизация любым ключом</big>\n<small>Разрешает псевдо-авторизацию любым ключом приложениями на активированных китайских клон-картах.</small></string>
+    <string name="settings_ignore_BCC_error"><big>Игнорировать ошибку BCC</big>\n<small>Карты с неверным BCC будут обнаружены. Это может помочь обнаружить испорченную клон-карту.</small></string>
+    <string name="root_request">Ожидание разрешения супер-пользователя…</string>
+    <string name="root_request_granted">Разрешение супер-пользователя получено</string>
+    <string name="root_request_declined">Разрешение супер-пользователя отклонено</string>
+    <string name="root_request_unavailable">Разрешение супер-пользователя недоступно</string>
+    <string name="service_starting">Служба запускается…</string>
+    <string name="service_stopping">Служба останавливается…</string>
+    <string name="connection_error">Ошибка подключения устройства</string>
+    <string name="settings_device">Настройки устройства</string>
+    <string name="settings_pcsc_mode"><big>Режим PC/SC</big>\n<small>Поддержка ридеров PC/SC (ACS ридеры)</small></string>
+    <string name="settings_baudrate"><big>Скорость</big>\n<small>Регулировка скорости последовательного порта (UART подключение)\nПереподключите устройство, чтобы применить</small></string>
+    <string name="default_baudrate">по умолчанию</string>
+
+</resources>

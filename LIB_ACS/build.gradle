@@ -1,0 +1,10 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+}
+
+dependencies {
+    implementation files('libs/acssmc-1.1.3.jar')
+    implementation project(':LIB_NFC')
+}
