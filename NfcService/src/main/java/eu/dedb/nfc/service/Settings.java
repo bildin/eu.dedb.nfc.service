@@ -135,7 +135,6 @@ public class Settings extends Activity implements OnLongClickListener,
 		switch (view.getId()) {
 		case R.id.settings_service_state:
 			((CheckBox) view).setChecked(NfcService.isRunning());
-			test();
 			break;
 		case R.id.settings_start_at_boot:
 			state = ((CheckBox) view).isChecked();
@@ -326,105 +325,5 @@ public class Settings extends Activity implements OnLongClickListener,
 	public void onNothingSelected(AdapterView<?> parent) {
 		// TODO Auto-generated method stub
 
-	}
-
-	protected void test() {
-		if(false)
-			return;
-
-
-		boolean hasNfcFeatureValue = getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC);
-		Log.v("TEST", "hasNfcFeatureValue " + hasNfcFeatureValue);
-
-		NfcManager nfcManager = (NfcManager) getSystemService(Context.NFC_SERVICE);
-		Log.v("TEST", "nfcManager " + nfcManager);
-
-		NfcAdapter nfcAdapter = nfcManager.getDefaultAdapter();
-		Log.v("TEST", "nfcAdapter " + nfcAdapter);
-
-		PICC mPICC;
-
-		UsbManager mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-		PendingIntent permissionIntent = PendingIntent.getService(this, 0, new Intent(
-				NfcService.ACTION_USB_PERMISSION).setClass(this, this.getClass()), 0);
-		Iterator<UsbDevice> deviceIterator = mUsbManager.getDeviceList()
-				.values().iterator();
-		while (deviceIterator.hasNext()) {
-			UsbDevice device = deviceIterator.next();
-			if (NfcService.isSupported(device)) {
-				//mUsbManager.requestPermission(device, permissionIntent);
-				int baudrate = preferences.getInt(
-						Settings.PREFERENCES_settings_baudrate, 0);
-
-				/*
-				MFRC522_UART mMFRC522 = MFRC522_UART.get(getApplicationContext(),
-						device, baudrate);
-				if(mMFRC522 != null) {
-					Log.v("TEST", mMFRC522.toString());
-					try {
-						mMFRC522.init();
-						PICC mPICC = mMFRC522.poll(0);
-						if(mPICC != null) {
-							Log.v("TEST", mPICC.toString());
-						} else {
-							Log.v("TEST", "Poll failed!");
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-				} else {
-					Log.v("TEST", "Connection failed!");
-				}
-				// */
-
-				PN53X_UART mPN532 = PN53X_UART.get(getApplicationContext(),
-						device, baudrate);
-				if(mPN532 != null) {
-					Log.v("TEST", mPN532.toString());
-					try {
-						mPN532.init();
-						/*
-						for(short addr = 0x6300; addr <= 0x633f; addr++) {
-							Log.v("REGMAP", String.format("%04X: %02X", addr, mPN532.readReg(addr)));
-						}
-						// */
-
-						Log.v("TEST", "Macro");
-						mPICC = mPN532.poll(0);
-
-						Log.v("TEST", String.format("%02X", mPN532.readReg((short) 0x6304)));
-
-						if(mPICC != null) {
-							Log.v("TEST", mPICC.toString());
-							Log.v("TEST", PN53X.toStr(mPN532.transceive(new byte[] {0x30, 0x00},true).getResponse()));
-						} else {
-							Log.v("TEST", "Poll failed!");
-						}
-
-
-						mPN532.init();
-
-						Log.v("TEST", "Manual");
-						mPICC = mPN532.poll(1);
-
-						Log.v("TEST", String.format("%02X", mPN532.readReg((short) 0x6304)));
-
-						if(mPICC != null) {
-							Log.v("TEST", mPICC.toString());
-							Log.v("TEST", PN53X.toStr(mPN532.transceive(new byte[] {0x30, 0x00},true).getResponse()));
-						} else {
-							Log.v("TEST", "Poll failed!");
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-				} else {
-					Log.v("TEST", "Connection failed!");
-				}
-
-			}
-		}
 	}
 }

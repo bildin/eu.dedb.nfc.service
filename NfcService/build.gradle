@@ -6,8 +6,8 @@ android {
         applicationId "eu.dedb.nfc.service"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 45
-        versionName "1.05b"
+        versionCode 46
+        versionName "1.06b"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

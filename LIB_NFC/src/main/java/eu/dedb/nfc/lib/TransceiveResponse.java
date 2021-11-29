@@ -38,6 +38,25 @@ public final class TransceiveResponse implements Parcelable {
 		}
 	}
 
+	protected TransceiveResponse(Parcel in) {
+		mResult = in.readInt();
+		mResponseData = in.createByteArray();
+		mValidBits = in.readInt();
+		mResponseType = in.readInt();
+	}
+
+	public static final Creator<TransceiveResponse> CREATOR = new Creator<TransceiveResponse>() {
+		@Override
+		public TransceiveResponse createFromParcel(Parcel in) {
+			return new TransceiveResponse(in);
+		}
+
+		@Override
+		public TransceiveResponse[] newArray(int size) {
+			return new TransceiveResponse[size];
+		}
+	};
+
 	public static TransceiveResponse getSuccessResponse() {
 		return new TransceiveResponse(RESULT_SUCCESS, new byte[0], 0);
 	}

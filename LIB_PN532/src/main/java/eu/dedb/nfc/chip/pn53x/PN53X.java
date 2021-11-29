@@ -16,11 +16,6 @@ public abstract class PN53X implements PCD {
 	private static final int EMERGENCY_TIMEOUT = 5000;
 
 	private String version_name = "PN53X UNKNOWN";
-
-	public static final int TRANSCEIVE_BYTES = 0;
-	public static final int TRANSCEIVE_BITS = 1;
-	public static final int CRC_TX = 2;
-	public static final int CRC_RX = 4;
 	
 	private Receiver mReceiver;
 
@@ -141,6 +136,7 @@ public abstract class PN53X implements PCD {
 		}
 	}
 
+	/*
 	@Override
 	public TransceiveResponse transceive_bytes(byte[] sendBuf, int sendLen,
 											   int timeout) throws IOException {
@@ -152,6 +148,7 @@ public abstract class PN53X implements PCD {
 											  int timeout) throws IOException {
 		return transceive(sendBuf, sendLen, timeout, TRANSCEIVE_BITS);
 	}
+	//*/
 
 	public TransceiveResponse transceive(byte[] sendBuf, boolean raw) throws IOException {
 		Log.v(TAG, "TRANSCEIVE " + toStr(sendBuf) + "(" + (raw ? "RAW" : "PROTOCOL") + ")");
@@ -475,8 +472,7 @@ public abstract class PN53X implements PCD {
 	// */
 
 
-	public TransceiveResponse transceive(byte[] sendBuf, int txLastBits,
-										 int timeout, int flags) throws IOException {
+	public TransceiveResponse transceive(byte[] sendBuf, int txLastBits, int timeout, int flags) throws IOException {
 
 		byte[] rx_buffer;
 
@@ -487,10 +483,11 @@ public abstract class PN53X implements PCD {
 				.writeReg(REG.CIU_CommIrq, 0x7F)
 				.writeReg(REG.CIU_TxMode, (flags & CRC_TX) != 0 ? 0x80 : 0x00)
 				.writeReg(REG.CIU_RxMode, (flags & CRC_RX) != 0 ? 0x80 : 0x00)
+				.writeReg(REG.CIU_ManualRCV, (flags & PARITY_AS_DATA) != 0 ? 0x80 : 0x00)
 				.writeReg(REG.CIU_FIFOLevel, 0x80)
 				.writeReg(REG.CIU_FIFOData, sendBuf)
 				.writeReg(REG.CIU_Command, CIU_CMD.Transceive)
-				.writeReg(REG.CIU_BitFraming, 0x80 | txLastBits & 0x07)
+				.writeReg(REG.CIU_BitFraming, 0x80 | txLastBits)
 		.run(this);
 
 		TransferBuilder tb = TransferBuilder.get().write(CMD.ReadRegister)

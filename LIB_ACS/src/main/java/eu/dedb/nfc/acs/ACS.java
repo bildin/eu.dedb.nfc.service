@@ -27,11 +27,6 @@ public class ACS implements PCD {
 
     private String version_name = "ACR UNKNOWN";
 
-	public static final int TRANSCEIVE_BYTES = 0;
-	public static final int TRANSCEIVE_BITS = 1;
-	public static final int CRC_TX = 2;
-	public static final int CRC_RX = 4;
-
 	private boolean targetInited = false;
 
 	private UsbManager mUsbManager;
@@ -57,8 +52,7 @@ public class ACS implements PCD {
 		if (mUsbDevice == null)
 			return null;
 		try {
-			UsbManager mUsbManager = (UsbManager) ctx
-					.getSystemService(Context.USB_SERVICE);
+			UsbManager mUsbManager = (UsbManager) ctx.getSystemService(Context.USB_SERVICE);
 			Reader mReader = new Reader(mUsbManager);
 			if (mReader.isSupported(mUsbDevice)) {
 				mReader.open(mUsbDevice); // throws IllegalArgumentException;
@@ -253,6 +247,7 @@ public class ACS implements PCD {
 		return mReader.getReaderName() + " (" + version_name + ")";
 	}
 
+	/*
 	@Override
 	public TransceiveResponse transceive_bytes(byte[] sendBuf, int sendLen,
 			int timeout) throws IOException {
@@ -264,6 +259,7 @@ public class ACS implements PCD {
 			int timeout) throws IOException {
 		return transceive(sendBuf, sendLen, timeout, TRANSCEIVE_BITS);
 	}
+	//*/
 
 	public TransceiveResponse authenticateMR(byte keyType, byte blockNumber,
 			byte[] key, byte[] uid) throws IOException {
@@ -379,8 +375,7 @@ public class ACS implements PCD {
 		return new TransceiveResponse(0, recvBuf, validBits & 0x07);
 	}
 
-	public TransceiveResponse transceive(byte[] sendBuf, int txLastBits,
-			int timeout, int flags) throws IOException {
+	public TransceiveResponse transceive(byte[] sendBuf, int txLastBits, int timeout, int flags) throws IOException {
         Log.v(TAG, "DATA > " + toStr(sendBuf) + (((txLastBits & 0x07) != 0) ? ("(" + (txLastBits & 0x07) + " bit)") : ""));
 
         // Disable Tx CRC
@@ -394,9 +389,11 @@ public class ACS implements PCD {
 
 		0x63, 0x02, (flags & CRC_TX) != 0 ? (byte) 0x80 : (byte) 0x00,
 
-		0x63, 0x03, 0x00,/* (flags & CRC_RX) != 0 ? (byte) 0x80 : (byte) 0x00, */
+		0x63, 0x03, (flags & CRC_RX) != 0 ? (byte) 0x80 : (byte) 0x00,
 
-		0x63, 0x3D, (byte) (txLastBits & 0x07)
+		0x63, 0x0D, (flags & PARITY_AS_DATA) != 0 ? (byte) 0x10 : (byte) 0x00,
+
+		0x63, 0x3D, (byte) (txLastBits & 0x7F)
 
 		});
 
@@ -408,7 +405,7 @@ public class ACS implements PCD {
 				// No Error
 				// Last bits received
 				int validBits = readReg(0x633C) & 0x07;
-				int recvLen = (validBits == 0 && (flags & CRC_RX) != 0) ? response.length - 3 : response.length - 1;
+				int recvLen = response.length - 1; //(validBits == 0 && (flags & CRC_RX) != 0) ? response.length - 3 : response.length - 1;
 				byte[] recvBuf = new byte[recvLen];
 
                 System.arraycopy(response, 1, recvBuf, 0, recvBuf.length);
@@ -454,21 +451,23 @@ public class ACS implements PCD {
 				try {
 					// Disable AutoRATS (for ACR122)
 					// Auto PICC Polling | Polling Interval 250 ms | ISO14443A
-					byte config = (byte) (1 << 0 | // ISO14443A
+					byte config = (byte) (
+							1 << 0 | // ISO14443A
 							0 << 1 | // ISO14443B
 							0 << 2 | // Topaz
 							0 << 3 | // FeliCa 212K
 							0 << 4 | // FeliCa 424K
 							1 << 5 | // Pooling Interval (0: 500ms; 1: 250ms)
 							0 << 6 | // Auto ATS Generation
-					1 << 7 // Auto PICC Polling
+							1 << 7 // Auto PICC Polling
 					);
 					escape(new byte[] { (byte) 0xFF, 0x00, 0x51, config, 0x00 });
 				} catch (Exception e) {
 					// Disable AutoRATS (for ACR1251, ACR1281)
 					// Auto PICC Polling | Polling Interval 250 ms | Turn off
 					// Antenna Field if no PICC is found
-					byte config = (byte) (1 << 0 | // Auto PICC Polling
+					byte config = (byte) (
+							1 << 0 | // Auto PICC Polling
 							1 << 1 | // Turn off Antenna Field if no PICC is
 										// found
 							0 << 2 | // Turn off Antenna Field if the PICC is
@@ -479,7 +478,7 @@ public class ACS implements PCD {
 							0 << 5 | // (00: 250ms; 01: 200ms; 10: 1000ms; 11:
 										// 2500ms)
 							0 << 6 | // RFU
-					0 << 7 // Enforce ISO14443A-4
+							0 << 7 // Enforce ISO14443A-4
 					);
 					escape(new byte[] { (byte) 0xE0, 0x00, 0x00, 0x23, 0x01,
 							config });

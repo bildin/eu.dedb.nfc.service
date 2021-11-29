@@ -15,11 +15,6 @@ public abstract class MFRC522 implements PCD {
 
 	private String version_name = "MFRC522 UNKNOWN";
 
-	public static final int TRANSCEIVE_BYTES = 0;
-	public static final int TRANSCEIVE_BITS = 1;
-	public static final int CRC_TX = 2;
-	public static final int CRC_RX = 4;
-
 	abstract public TransferBuilder transfer(TransferBuilder tb) throws IOException;
 
 	public byte[] readFIFO() throws IOException {
@@ -92,6 +87,7 @@ public abstract class MFRC522 implements PCD {
 		}
 	}
 
+	/*
 	@Override
 	public TransceiveResponse transceive_bytes(byte[] sendBuf, int sendLen,
 			int timeout) throws IOException {
@@ -103,7 +99,9 @@ public abstract class MFRC522 implements PCD {
 			int timeout) throws IOException {
 		return transceive(sendBuf, sendLen, timeout, TRANSCEIVE_BITS);
 	}
+	//*/
 
+	@Override
 	public TransceiveResponse transceive(byte[] sendBuf, boolean raw) throws IOException {
 		Log.v(TAG, "TRANSCEIVE " + toStr(sendBuf) + "(" + (raw ? "RAW" : "PROTOCOL") + ")");
 		if (!raw) {
@@ -230,8 +228,7 @@ public abstract class MFRC522 implements PCD {
 		return null;
 	}
 
-	public TransceiveResponse authenticate(byte keyType, byte blockNumber,
-			byte[] key, byte[] uid) throws IOException {
+	public TransceiveResponse authenticate(byte keyType, byte blockNumber, byte[] key, byte[] uid) throws IOException {
 		Log.v(TAG, "AUTH > block " + toStr(blockNumber) + "key " + (keyType == 0x61 ? "B" : "A") + ": " + toStr(key));
 
 		byte irq, error, status;
@@ -304,8 +301,8 @@ public abstract class MFRC522 implements PCD {
 		return new TransceiveResponse(0, new byte[0],0);
 	}
 
-	public TransceiveResponse transceive(byte[] sendBuf, int txLastBits,
-			int timeout, int flags) throws IOException {
+	@Override
+	public TransceiveResponse transceive(byte[] sendBuf, int txLastBits, int timeout, int flags) throws IOException {
 		Log.v(TAG, "DATA > " + toStr(sendBuf) + (((txLastBits & 0x07) != 0) ? ("(" + (txLastBits & 0x07) + " bit)") : ""));
 
 		if (timeout == 0)
@@ -315,14 +312,13 @@ public abstract class MFRC522 implements PCD {
 		response = transfer(TransferBuilder.get().
 			writeReg(REG.CommandReg, CMD.Idle).
 			writeReg(REG.ComIrqReg, (byte) 0x7F).
-			writeReg(REG.TxModeReg, (flags & CRC_TX) != 0 ? (byte) 0x80
-					: (byte) 0x00).
-			writeReg(REG.RxModeReg, (flags & CRC_RX) != 0 ? (byte) 0x80
-					: (byte) 0x00).
+			writeReg(REG.TxModeReg, (flags & CRC_TX) != 0 ? (byte) 0x80 : (byte) 0x00).
+			writeReg(REG.RxModeReg, (flags & CRC_RX) != 0 ? (byte) 0x80 : (byte) 0x00).
+			writeReg(REG.MfRxReg, (flags & PARITY_AS_DATA) != 0 ? (byte) 0x10 : (byte) 0x00).
 			writeReg(REG.FIFOLevelReg, (byte) 0x80).
 			writeReg(REG.FIFODataReg, sendBuf).
 			writeReg(REG.CommandReg, CMD.Transceive).
-			writeReg(REG.BitFramingReg, (byte) (0x80 | txLastBits & 0x07)).
+			writeReg(REG.BitFramingReg, (byte) (0x80 | txLastBits)).
 
 			//readReg(REG.ComIrqReg). // just wait - enough for 9600 baudrate to exclude wait loop
 			readReg(REG.ComIrqReg).
@@ -357,7 +353,18 @@ public abstract class MFRC522 implements PCD {
 			}
 		}
 
-		if ((error & 0x13) != 0) { // 0x1B with collision
+		byte errorMask = (byte) (0
+				| 1 << 0	// ProtocolErr
+//				| 1 << 1	// ParityErr
+//				| 1 << 2	// CRCErr
+				| 1 << 3	// CollErr
+				| 1 << 4	// BufferOvfl
+//				| 1 << 5	// reserved
+				| 1 << 6	// TempErr
+				| 1 << 7	// WrErr
+		);
+
+		if ((error & errorMask) != 0) { // 0x1B with collision
 			Log.v(TAG, "DATA < FAILED! (I/O error 0x" + toStr(error) + ")");
 			// return new TransceiveResponse(-1, null, 0);
 			return TransceiveResponse.getIOErrorResponse();

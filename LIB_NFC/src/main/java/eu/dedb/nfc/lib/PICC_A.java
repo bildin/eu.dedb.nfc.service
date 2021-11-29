@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class PICC_A extends PICC {
 
-	private PCD mReader;
+	final private PCD mReader;
 	private byte[] mATQA;
 	private byte[] mUID;
 	private short mSAK;
@@ -123,8 +123,7 @@ public class PICC_A extends PICC {
 			byte[] cmd = new byte[1];
 			cmd[0] = (byte) 0x26;
 
-			TransceiveResponse tresponse = mReader.transceive_bits(cmd, 7,
-					INTERNAL_TIMEOUT);
+			TransceiveResponse tresponse = mReader.transceive(cmd, 7, INTERNAL_TIMEOUT, 0);
 			int errorCode = tresponse.getErrorCode();
 			if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 				state = STATE_READY_CL1;
@@ -141,8 +140,7 @@ public class PICC_A extends PICC {
 			byte[] cmd = new byte[1];
 			cmd[0] = (byte) 0x52;
 
-			TransceiveResponse tresponse = mReader.transceive_bits(cmd, 7,
-					INTERNAL_TIMEOUT);
+			TransceiveResponse tresponse = mReader.transceive(cmd, 7, INTERNAL_TIMEOUT, 0);
 			int errorCode = tresponse.getErrorCode();
 			if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 				state &= STATE_HALT;
@@ -160,20 +158,17 @@ public class PICC_A extends PICC {
 			byte[] cmd = new byte[1];
 			cmd[0] = (byte) 0x40;
 
-			TransceiveResponse tresponse = mReader.transceive_bits(cmd, 7,
-					INTERNAL_TIMEOUT);
+			TransceiveResponse tresponse = mReader.transceive(cmd, 7, INTERNAL_TIMEOUT, 0);
 			int errorCode = tresponse.getErrorCode();
 			if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 				if (tresponse.isACK()) {
 					cmd[0] = (byte) 0x43;
-					tresponse = mReader.transceive_bytes(cmd, cmd.length,
-							INTERNAL_TIMEOUT);
+					tresponse = mReader.transceive(cmd, 0, INTERNAL_TIMEOUT, 0);
 					errorCode = tresponse.getErrorCode();
 					if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 						if (tresponse.isACK()) {
 							cmd = new byte[] { 0x30, 0, 0x02, (byte) 0xA8 };
-							tresponse = mReader.transceive_bytes(cmd,
-									cmd.length, INTERNAL_TIMEOUT);
+							tresponse = mReader.transceive(cmd, 0, INTERNAL_TIMEOUT, 0);
 							errorCode = tresponse.getErrorCode();
 							if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 								ChineseResp = tresponse.getResponse();
@@ -232,8 +227,7 @@ public class PICC_A extends PICC {
 			cmd[2] = (byte) 0x57;
 			cmd[3] = (byte) 0xCD;
 
-			TransceiveResponse tresponse = mReader.transceive_bytes(cmd,
-					cmd.length, INTERNAL_TIMEOUT);
+			TransceiveResponse tresponse = mReader.transceive(cmd, 0, INTERNAL_TIMEOUT, 0);
 			int errorCode = tresponse.getErrorCode();
 			if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 				state = STATE_HALT;
@@ -256,8 +250,7 @@ public class PICC_A extends PICC {
 				cmd[0] = (byte) 0x97;
 			cmd[1] = (byte) 0x20;
 
-			TransceiveResponse tresponse = mReader.transceive_bytes(cmd,
-					cmd.length, INTERNAL_TIMEOUT);
+			TransceiveResponse tresponse = mReader.transceive(cmd, 0, INTERNAL_TIMEOUT, 0);
 			int errorCode = tresponse.getErrorCode();
 			if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 				return tresponse.getResponse();
@@ -281,8 +274,7 @@ public class PICC_A extends PICC {
 			System.arraycopy(uid_part, 0, cmd, 2, 5);
 			cmd = appendCRC(cmd);
 
-			TransceiveResponse tresponse = mReader.transceive_bytes(cmd,
-					cmd.length, INTERNAL_TIMEOUT);
+			TransceiveResponse tresponse = mReader.transceive(cmd, 0, INTERNAL_TIMEOUT, 0);
 			int errorCode = tresponse.getErrorCode();
 			if (errorCode == TransceiveResponse.RESULT_SUCCESS) {
 				return tresponse.getResponse();
@@ -456,6 +448,8 @@ public class PICC_A extends PICC {
 		}
 
 		atqa = nCard.WUPA();
+		if(atqa == null)
+			atqa = nCard.WUPA();
 		if (nCard.AntiCollisionLoop(atqa)) {
 			return nCard;
 		}
@@ -654,8 +648,7 @@ public class PICC_A extends PICC {
 	}
 
 	@Override
-	public TransceiveResponse transceive(int nativeHandle, byte[] data,
-			boolean raw) throws IOException {
+	public TransceiveResponse transceive(int nativeHandle, byte[] data, boolean raw) throws IOException {
 		if (mHandle != nativeHandle || data == null || data.length == 0) {
 			return null;
 		}

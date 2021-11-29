@@ -276,7 +276,7 @@ public final class MFRC522_AudioUART extends MFRC522 {
 	public TransceiveResponse transceive_atonce(byte[] sendBuf, int sendLen,
 			int timeout, int flags) throws IOException {
 
-		if ((flags & TRANSCEIVE_BITS) != 0) {
+		if ((flags & 1) != 0) {	//TODO TRANSCEIVE_BITS
 			byte[] atonce = new byte[18];
 			int responseLength = 11;
 			int i = 0;
